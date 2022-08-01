@@ -73,7 +73,7 @@ describe("/api/article/:article_id", () => {
     test("404: Returns correct error message", () => {
       return request(app)
         .patch("/api/articles/20000000")
-        .send({ inc_votes: -10 })
+        .send({ inc_votes: -10, banana: "banana" })
         .expect(404)
         .then((res) => {
           expect(res.body.msg).toBe("ID not found");
