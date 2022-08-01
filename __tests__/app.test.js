@@ -12,6 +12,13 @@ afterAll(() => {
 
 describe("/api/topics", () => {
   describe("GET", () => {
-    test("");
+    test("200: Returns list of topic objects", () => {
+      return request(app)
+        .get("/api/topics")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.topics).toEqual(data.topicData);
+        });
+    });
   });
 });
