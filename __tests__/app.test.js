@@ -6,9 +6,7 @@ const seed = require("../db/seeds/seed");
 
 beforeEach(() => seed(data));
 
-afterAll(() => {
-  if (db.end) db.end();
-});
+afterAll(() => { db.end(); });
 
 describe("/api/topics", () => {
   describe("GET", () => {
