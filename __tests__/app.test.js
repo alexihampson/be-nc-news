@@ -55,4 +55,49 @@ describe("/api/article/:article_id", () => {
         });
     });
   });
+
+  describe("PATCH", () => {
+    test("200: Returns the updated file", () => {
+      const output = convertTimestampToDate({ ...data.articleData[2], article_id: 3 });
+      output.created_at = output.created_at.toJSON();
+      output.votes -= 10;
+      return request(app)
+        .patch("/api/articles/3")
+        .send({ inc_votes: -10 })
+        .expect(200)
+        .then((res) => {
+          expect(res.body.article).toEqual(output);
+        });
+    });
+
+    test("404: Returns correct error message", () => {
+      return request(app)
+        .patch("/api/articles/20000000")
+        .send({ inc_votes: -10, banana: "banana" })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns correct error message for wrong path", () => {
+      return request(app)
+        .patch("/api/articles/banana")
+        .send({ inc_votes: -10 })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("400: Returns correct error message for wrong body", () => {
+      return request(app)
+        .patch("/api/articles/3")
+        .send({ banana: "banana" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body incorrectly formatted");
+        });
+    });
+  });
 });
