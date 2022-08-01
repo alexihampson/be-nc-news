@@ -101,3 +101,16 @@ describe("/api/article/:article_id", () => {
     });
   });
 });
+
+describe("/api/users", () => {
+  describe("GET", () => {
+    test("200: Returns list of user objects", () => {
+      return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.users).toEqual(data.userData);
+        });
+    });
+  });
+});
