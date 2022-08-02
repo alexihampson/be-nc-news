@@ -136,6 +136,82 @@ describe("/api/articles", () => {
           });
         });
     });
+
+    test("200: Returns list of articles sorted by given column name", () => {
+      return request(app)
+        .get("/api/articles?sort_by=title")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles).toBeSortedBy("title", { descending: true });
+        });
+    });
+
+    test("200: Returns list of articles sorted by given order", () => {
+      return request(app)
+        .get("/api/articles?order=asc")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles).toBeSortedBy("created_at");
+        });
+    });
+
+    test("200: Returns list of articles filtered by a given topic", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles.length).toBe(1);
+          res.body.articles.forEach((article) => {
+            expect(article.topic).toBe("cats");
+          });
+        });
+    });
+
+    test("200: Returns list of articles after processing multiple queries", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&order=asc&sort_by=article_id")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles).toBeSortedBy("article_id");
+          expect(res.body.articles.length).toBe(data.articleData.length - 1);
+        });
+    });
+
+    test("200: Returns empty list of articles if given topic exists but has no articles", () => {
+      return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.articles.length).toBe(0);
+        });
+    });
+
+    test("400: Returns error if sort_by column doesn't exist", () => {
+      return request(app)
+        .get("/api/articles?sort_by=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Incorrect column name");
+        });
+    });
+
+    test("400: Returns error if order is not asc or desc", () => {
+      return request(app)
+        .get("/api/articles?order=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Incorrect order format");
+        });
+    });
+
+    test("404: Returns error if topic doesn't exist", () => {
+      return request(app)
+        .get("/api/articles?topic=banana")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Topic not found");
+        });
+    });
   });
 });
 

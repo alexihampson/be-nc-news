@@ -1,7 +1,13 @@
 const express = require("express");
 const { getAllTopics } = require("./controllers/topics");
 const { getArticleById, patchArticleById, getAllArticles } = require("./controllers/articles");
-const { customErrors, sqlNotInteger, sqlForeignKeyConstraint } = require("./app.errors");
+const {
+  customErrors,
+  sqlNotInteger,
+  sqlForeignKeyConstraint,
+  sqlNoColumn,
+  sqlBadOrder,
+} = require("./app.errors");
 const { getAllUsers } = require("./controllers/users");
 const { getCommentsByArticleId, postCommentByArticleId } = require("./controllers/comments");
 
@@ -34,6 +40,10 @@ app.use(customErrors);
 app.use(sqlNotInteger);
 
 app.use(sqlForeignKeyConstraint);
+
+app.use(sqlNoColumn);
+
+app.use(sqlBadOrder);
 
 app.use((err, req, res, next) => {
   console.log(err);
