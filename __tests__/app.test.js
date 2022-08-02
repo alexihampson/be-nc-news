@@ -4,6 +4,7 @@ const db = require("../db/connection");
 const data = require("../db/data/test-data");
 const seed = require("../db/seeds/seed");
 const { convertTimestampToDate } = require("../db/seeds/utils");
+const endpoints = require("../endpoints.json");
 
 beforeEach(() => seed(data));
 
@@ -323,6 +324,45 @@ describe("/api/articles/:article_id/comments", () => {
         .expect(400)
         .then((res) => {
           expect(res.body.msg).toBe("Body incorrectly formatted");
+        });
+    });
+  });
+});
+
+describe("/api/comments/:comment_id", () => {
+  describe("DELETE", () => {
+    test("204: Returns no content if the delete complete", () => {
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+
+    test("404: Returns error if comment id not in the db", () => {
+      return request(app)
+        .delete("/api/comments/1000000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns error if comment id not in the db", () => {
+      return request(app)
+        .delete("/api/comments/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+  });
+});
+
+describe("/api", () => {
+  describe("GET", () => {
+    test("200: Returns data from endpoints.json", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.endpoints).toEqual(endpoints);
         });
     });
   });
