@@ -1,9 +1,9 @@
 const express = require("express");
 const { getAllTopics } = require("./controllers/topics");
 const { getArticleById, patchArticleById, getAllArticles } = require("./controllers/articles");
-const { customErrors, sqlNotInteger } = require("./app.errors");
+const { customErrors, sqlNotInteger, sqlForeignKeyConstraint } = require("./app.errors");
 const { getAllUsers } = require("./controllers/users");
-const { getCommentsByArticleId } = require("./controllers/comments");
+const { getCommentsByArticleId, postCommentByArticleId } = require("./controllers/comments");
 
 const app = express();
 
@@ -23,6 +23,7 @@ app.get("/api/users", getAllUsers);
 app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
@@ -31,6 +32,8 @@ app.all("/*", (req, res) => {
 app.use(customErrors);
 
 app.use(sqlNotInteger);
+
+app.use(sqlForeignKeyConstraint);
 
 app.use((err, req, res, next) => {
   console.log(err);

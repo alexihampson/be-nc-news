@@ -184,4 +184,70 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
   });
+
+  describe("POST", () => {
+    test("201: Returns posted comment", () => {
+      const test = { username: "lurker", body: "Nice Article!" };
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(test)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment.comment_id).toEqual(expect.any(Number));
+          expect(res.body.comment.votes).toEqual(expect.any(Number));
+          expect(res.body.comment.created_at).toEqual(expect.any(String));
+          expect(res.body.comment.author).toBe(test.username);
+          expect(res.body.comment.body).toBe(test.body);
+          expect(res.body.comment.article_id).toBe(1);
+        });
+    });
+
+    test("201: Returns posted comment ignoring other keys", () => {
+      const test = { username: "lurker", body: "Nice Article!", banana: "banana" };
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send(test)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.comment.comment_id).toEqual(expect.any(Number));
+          expect(res.body.comment.votes).toEqual(expect.any(Number));
+          expect(res.body.comment.created_at).toEqual(expect.any(String));
+          expect(res.body.comment.author).toBe(test.username);
+          expect(res.body.comment.body).toBe(test.body);
+          expect(res.body.comment.article_id).toBe(1);
+        });
+    });
+
+    test("404: Returns correct error message", () => {
+      const test = { username: "lurker", body: "Nice Article!" };
+      return request(app)
+        .post("/api/articles/20000000/comments")
+        .send(test)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns correct error message", () => {
+      const test = { username: "lurker", body: "Nice Article!" };
+      return request(app)
+        .post("/api/articles/banana/comments")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("400: Returns correct error message for wrong body", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({ banana: "banana" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body incorrectly formatted");
+        });
+    });
+  });
 });
