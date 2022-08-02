@@ -138,3 +138,50 @@ describe("/api/articles", () => {
     });
   });
 });
+
+describe("/api/articles/:article_id/comments", () => {
+  describe("GET", () => {
+    test("200: Returns list of comments for an article", () => {
+      return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments.length).toBe(11);
+          res.body.comments.forEach((comment) => {
+            expect(comment.comment_id).toEqual(expect.any(Number));
+            expect(comment.votes).toEqual(expect.any(Number));
+            expect(comment.created_at).toEqual(expect.any(String));
+            expect(comment.author).toEqual(expect.any(String));
+            expect(comment.body).toEqual(expect.any(String));
+          });
+        });
+    });
+
+    test("200: Returns empty list of comments for an article with no comments", () => {
+      return request(app)
+        .get("/api/articles/2/comments")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments.length).toBe(0);
+        });
+    });
+
+    test("404: Returns correct error message", () => {
+      return request(app)
+        .get("/api/articles/20000000/comments")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns correct error message", () => {
+      return request(app)
+        .get("/api/articles/banana/comments")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+  });
+});

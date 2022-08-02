@@ -3,6 +3,7 @@ const { getAllTopics } = require("./controllers/topics");
 const { getArticleById, patchArticleById, getAllArticles } = require("./controllers/articles");
 const { customErrors, sqlNotInteger } = require("./app.errors");
 const { getAllUsers } = require("./controllers/users");
+const { getCommentsByArticleId } = require("./controllers/comments");
 
 const app = express();
 
@@ -20,6 +21,8 @@ app.patch("/api/articles/:article_id", patchArticleById);
 app.get("/api/users", getAllUsers);
 
 app.get("/api/articles", getAllArticles);
+
+app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
