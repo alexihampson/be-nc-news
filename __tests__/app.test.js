@@ -327,3 +327,29 @@ describe("/api/articles/:article_id/comments", () => {
     });
   });
 });
+
+describe("/api/comments/:comment_id", () => {
+  describe("DELETE", () => {
+    test("204: Returns no content if the delete complete", () => {
+      return request(app).delete("/api/comments/1").expect(204);
+    });
+
+    test("404: Returns error if comment id not in the db", () => {
+      return request(app)
+        .delete("/api/comments/1000000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns error if comment id not in the db", () => {
+      return request(app)
+        .delete("/api/comments/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+  });
+});

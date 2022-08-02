@@ -23,3 +23,13 @@ exports.insertCommentByArticleId = async (id, body) => {
 
   return row;
 };
+
+exports.removeCommentById = async (id) => {
+  const {
+    rows: [row],
+  } = await db.query("DELETE FROM comments WHERE comment_id=$1 RETURNING *;", [id]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "ID not found" });
+
+  return row;
+};

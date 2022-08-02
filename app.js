@@ -9,7 +9,11 @@ const {
   sqlBadOrder,
 } = require("./app.errors");
 const { getAllUsers } = require("./controllers/users");
-const { getCommentsByArticleId, postCommentByArticleId } = require("./controllers/comments");
+const {
+  getCommentsByArticleId,
+  postCommentByArticleId,
+  deleteCommentById,
+} = require("./controllers/comments");
 
 const app = express();
 
@@ -30,6 +34,8 @@ app.get("/api/articles", getAllArticles);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
+
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "Route not found" });
