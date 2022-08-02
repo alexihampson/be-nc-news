@@ -29,6 +29,7 @@ describe("/api/article/:article_id", () => {
     test("200: Returns requested article", () => {
       const output = convertTimestampToDate({ ...data.articleData[2], article_id: 3 });
       output.created_at = output.created_at.toJSON();
+      output.comment_count = "2";
       return request(app)
         .get("/api/articles/3")
         .expect(200)
