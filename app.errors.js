@@ -21,3 +21,19 @@ exports.sqlForeignKeyConstraint = (err, req, res, next) => {
     next(err);
   }
 };
+
+exports.sqlNoColumn = (err, req, res, next) => {
+  if (err.code === "42703") {
+    res.status(400).send({ msg: "Incorrect column name" });
+  } else {
+    next(err);
+  }
+};
+
+exports.sqlBadOrder = (err, req, res, next) => {
+  if (err.code === "42601") {
+    res.status(400).send({ msg: "Incorrect order format" });
+  } else {
+    next(err);
+  }
+};

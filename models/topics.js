@@ -6,3 +6,13 @@ exports.selectAllTopics = async () => {
 
   return rows;
 };
+
+exports.selectTopicBySlug = async (slug) => {
+  const {
+    rows: [row],
+  } = await db.query("SELECT * FROM topics WHERE slug=$1;", [slug]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "Topic not found" });
+
+  return row;
+};
