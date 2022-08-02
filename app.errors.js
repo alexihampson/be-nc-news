@@ -13,3 +13,11 @@ exports.sqlNotInteger = (err, req, res, next) => {
     next(err);
   }
 };
+
+exports.sqlForeignKeyConstraint = (err, req, res, next) => {
+  if (err.code === "23503") {
+    res.status(404).send({ msg: "ID not found" });
+  } else {
+    next(err);
+  }
+};
