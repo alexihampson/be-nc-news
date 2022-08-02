@@ -15,6 +15,8 @@ exports.selectArticleById = async (id) => {
 
   if (!row) return Promise.reject({ status: 404, msg: "ID not found" });
 
+  row.comment_count = parseInt(row.comment_count);
+
   return row;
 };
 
