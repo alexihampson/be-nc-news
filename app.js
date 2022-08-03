@@ -14,13 +14,14 @@ const {
   postCommentByArticleId,
   deleteCommentById,
 } = require("./controllers/comments");
+const endpoints = require("./endpoints.json");
 
 const app = express();
 
 app.use(express.json());
 
 app.get("/api", (req, res) => {
-  res.status(200).send({ msg: "Hello There!" });
+  res.status(200).send({ endpoints });
 });
 
 app.get("/api/topics", getAllTopics);
