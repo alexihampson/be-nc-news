@@ -34,14 +34,16 @@ exports.getAllArticles = (req, res, next) => {
 
   const sort_by = query.sort_by || "created_at";
   const order = query.order || "desc";
+  const limit = query.limit || 10;
+  const p = query.p || 1;
 
-  const promises = [selectAllArticles(sort_by, order, query.topic)];
+  const promises = [selectAllArticles(sort_by, order, query.topic, parseInt(limit), parseInt(p))];
 
   if (query.topic) promises.push(selectTopicBySlug(query.topic));
 
   Promise.all(promises)
-    .then(([articles]) => {
-      res.status(200).send({ articles });
+    .then(([[articles, total_count]]) => {
+      res.status(200).send({ total_count, articles });
     })
     .catch(next);
 };
