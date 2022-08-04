@@ -157,3 +157,37 @@ Response Format Example:
 ### DELETE /api/comments/:comment_id
 
 Removes the chosen comment from the database using `deleteCommentById` and `removeCommentById(id)`. Returns 204 - No Content.
+
+### GET /api/users/:username
+
+Returns a JSON object containing the user requested using `getUserByUsername` and `selectUserByUsername(username)`.
+
+Response Format Example:
+
+```
+{
+"user": {
+    "username": "lurker",
+    "name": "do_nothing",
+    "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    }
+}
+```
+
+### PATCH /api/comments/:comment_id
+
+Updates the chosen comments `votes` value by the amount provided using `patchCommentById` and `updateCommentById(id, body)`. The body must contain the key `inc_votes` and all other keys will be ignored. Responds with the updated article.
+
+Response Format Example:
+
+```
+{
+"comment": {
+    "comment_id": 12,
+    "votes": 15,
+    "created_at": "2020-11-03T09:12:00.000Z",
+    "author": "johnsmith",
+    "body": "Text from the comment..."
+    }
+}
+```
