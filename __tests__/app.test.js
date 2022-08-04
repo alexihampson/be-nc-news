@@ -214,6 +214,53 @@ describe("/api/articles", () => {
         });
     });
   });
+
+  describe("POST", () => {
+    test("201: Returns added article", () => {
+      const test = {
+        author: "lurker",
+        title: "Test Article",
+        body: "This is a test",
+        topic: "cats",
+        banana: "banana",
+      };
+      return request(app)
+        .post("/api/articles")
+        .send(test)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.article.article_id).toEqual(expect.any(Number));
+          expect(res.body.article.votes).toEqual(expect.any(Number));
+          expect(res.body.article.created_at).toEqual(expect.any(String));
+          expect(res.body.article.author).toBe(test.author);
+          expect(res.body.article.body).toBe(test.body);
+          expect(res.body.article.title).toBe(test.title);
+          expect(res.body.article.topic).toBe(test.topic);
+        });
+    });
+
+    test("400: Returns error if body doesn't contain all required info", () => {
+      test = { title: "Test", banana: "banana" };
+      return request(app)
+        .post("/api/articles")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+
+    test("400: Returns error if author isn't in users table", () => {
+      test = { title: "Test", author: "banana", body: "This is a test", topic: "cats" };
+      return request(app)
+        .post("/api/articles")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+  });
 });
 
 describe("/api/articles/:article_id/comments", () => {
