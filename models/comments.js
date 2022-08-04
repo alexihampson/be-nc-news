@@ -33,3 +33,18 @@ exports.removeCommentById = async (id) => {
 
   return row;
 };
+
+exports.updateCommentById = async (id, body) => {
+  if (!body.inc_votes) return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query("UPDATE comments SET votes=votes+$1 WHERE comment_id=$2 RETURNING *;", [
+    body.inc_votes,
+    id,
+  ]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "ID not found" });
+
+  return row;
+};

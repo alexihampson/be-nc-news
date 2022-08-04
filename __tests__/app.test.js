@@ -353,6 +353,52 @@ describe("/api/comments/:comment_id", () => {
         });
     });
   });
+
+  describe("PATCH", () => {
+    test("200: Returns updated comment", () => {
+      const test = { inc_votes: -10, banana: "banana" };
+      return request(app)
+        .patch("/api/comments/3")
+        .send(test)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comment.votes).toBe(90);
+        });
+    });
+
+    test("404: Returns error if comment id doesn't exist", () => {
+      const test = { inc_votes: -10, banana: "banana" };
+      return request(app)
+        .patch("/api/comments/3000000")
+        .send(test)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID not found");
+        });
+    });
+
+    test("400: Returns error if comment id is invalid", () => {
+      const test = { inc_votes: -10, banana: "banana" };
+      return request(app)
+        .patch("/api/comments/banana")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("400: Returns error if body is invalid", () => {
+      const test = { banana: "banana" };
+      return request(app)
+        .patch("/api/comments/3")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+  });
 });
 
 describe("/api", () => {
