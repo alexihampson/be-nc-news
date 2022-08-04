@@ -1,13 +1,19 @@
 const db = require("../db/connection");
 const format = require("pg-format");
 
-exports.selectCommentsByArticleId = async (id) => {
+exports.selectCommentsByArticleId = async (id, limit, p) => {
   const { rows } = await db.query(
-    "SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id=$1;",
-    [id]
+    "SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id=$1  LIMIT $2 OFFSET $3;",
+    [id, limit, (p - 1) * limit]
   );
 
-  return rows;
+  const {
+    rows: [{ total_count }],
+  } = await db.query("SELECT COUNT(*) AS total_count FROM comments WHERE article_id=$1;", [id]);
+
+  if (total_count < (p - 1) * limit) return Promise.reject({ status: 404, msg: "Page Not Found" });
+
+  return [rows, parseInt(total_count)];
 };
 
 exports.insertCommentByArticleId = async (id, body) => {
