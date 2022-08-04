@@ -40,6 +40,7 @@ Response Format Example:
 
 ```
 {
+"total_count": 420,
 "articles": [
     {
         "title": "Seafood substitutions are increasing",
@@ -117,12 +118,13 @@ Response Format Example:
 
 ### GET /api/articles/:article_id/comments
 
-Serves an array of all comments linked to the given article using `getCommentsByArticleId` and `selectCommentsByArticleId(id)`.
+Serves an array of all comments linked to the given article using `getCommentsByArticleId` and `selectCommentsByArticleId(id)`. The response will be paginated with a default size limit of 10, the limit can be changed by using the `limit` query and the page can be select using the `p` query.
 
 Response Format Example:
 
 ```
 {
+"total_count": 420,
 "comments": [
     {
         "comment_id": 12,
