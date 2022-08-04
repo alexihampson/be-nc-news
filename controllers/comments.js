@@ -7,11 +7,17 @@ const {
 const { selectArticleById } = require("../models/articles");
 
 exports.getCommentsByArticleId = (req, res, next) => {
-  const { article_id } = req.params;
+  const {
+    params: { article_id },
+    query,
+  } = req;
 
-  Promise.all([selectCommentsByArticleId(article_id), selectArticleById(article_id)])
-    .then(([comments]) => {
-      res.status(200).send({ comments });
+  Promise.all([
+    selectCommentsByArticleId(article_id, parseInt(query.limit || 10), parseInt(query.p || 1)),
+    selectArticleById(article_id),
+  ])
+    .then(([[comments, total_count]]) => {
+      res.status(200).send({ total_count, comments });
     })
     .catch(next);
 };

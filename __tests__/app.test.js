@@ -318,7 +318,8 @@ describe("/api/articles/:article_id/comments", () => {
         .get("/api/articles/1/comments")
         .expect(200)
         .then((res) => {
-          expect(res.body.comments.length).toBe(11);
+          expect(res.body.comments.length).toBe(10);
+          expect(res.body.total_count).toBe(11);
           res.body.comments.forEach((comment) => {
             expect(comment.comment_id).toEqual(expect.any(Number));
             expect(comment.votes).toEqual(expect.any(Number));
@@ -338,6 +339,40 @@ describe("/api/articles/:article_id/comments", () => {
         });
     });
 
+    test("200: Returns list of comments for an article length limited by a query", () => {
+      return request(app)
+        .get("/api/articles/1/comments?limit=5")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments.length).toBe(5);
+          expect(res.body.total_count).toBe(11);
+          res.body.comments.forEach((comment) => {
+            expect(comment.comment_id).toEqual(expect.any(Number));
+            expect(comment.votes).toEqual(expect.any(Number));
+            expect(comment.created_at).toEqual(expect.any(String));
+            expect(comment.author).toEqual(expect.any(String));
+            expect(comment.body).toEqual(expect.any(String));
+          });
+        });
+    });
+
+    test("200: Returns list of comments for an article with multiple pages", () => {
+      return request(app)
+        .get("/api/articles/1/comments?p=2")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments.length).toBe(1);
+          expect(res.body.total_count).toBe(11);
+          res.body.comments.forEach((comment) => {
+            expect(comment.comment_id).toEqual(expect.any(Number));
+            expect(comment.votes).toEqual(expect.any(Number));
+            expect(comment.created_at).toEqual(expect.any(String));
+            expect(comment.author).toEqual(expect.any(String));
+            expect(comment.body).toEqual(expect.any(String));
+          });
+        });
+    });
+
     test("404: Returns correct error message", () => {
       return request(app)
         .get("/api/articles/20000000/comments")
@@ -353,6 +388,33 @@ describe("/api/articles/:article_id/comments", () => {
         .expect(400)
         .then((res) => {
           expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("400: Returns correct error when given incorrect limit value", () => {
+      return request(app)
+        .get("/api/articles/1/comments?limit=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("400: Returns correct error when given incorrect page value", () => {
+      return request(app)
+        .get("/api/articles/1/comments?p=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+
+    test("404: Returns correct error when page value out of range", () => {
+      return request(app)
+        .get("/api/articles/1/comments?p=300")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Page Not Found");
         });
     });
   });
