@@ -101,6 +101,7 @@ Updates the chosen articles `votes` value by the amount provided using `patchArt
 Response Format Example:
 
 ```
+{
 "article": {
     "author": "johnsmith",
     "article_id": 5,
@@ -188,6 +189,27 @@ Response Format Example:
     "created_at": "2020-11-03T09:12:00.000Z",
     "author": "johnsmith",
     "body": "Text from the comment..."
+    }
+}
+```
+
+### POST /api/articles
+
+Adds a new article using `postArticle` and `insertArticle(body)`. The body must contain `author`, `title`, `body`, and `topic`. If any keys are missing then an error will be returned and any other keys will be ignored. Returns the added article.
+
+Response Format Example:
+
+```
+{
+"article": {
+    "author": "johnsmith",
+    "article_id": 5,
+    "title": "Seafood substitutions are increasing",
+    "body": "Text from the article..",
+    "topic": "cooking",
+    "created_at": "2020-11-03T09:12:00.000Z",
+    "votes": 10,
+    "comment_count": 15
     }
 }
 ```

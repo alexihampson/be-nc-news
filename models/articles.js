@@ -69,3 +69,18 @@ exports.selectAllArticles = async (sort_by, order, topic) => {
 
   return rows;
 };
+
+exports.insertArticle = async (body) => {
+  if (!body.title || !body.topic || !body.author || !body.body)
+    return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query(
+    `INSERT INTO articles (title, topic, author, body, created_at, votes)
+  VALUES ($1,$2,$3,$4,$5,$6) RETURNING *;`,
+    [body.title, body.topic, body.author, body.body, new Date(Date.now()), 0]
+  );
+
+  return row;
+};

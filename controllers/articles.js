@@ -1,4 +1,9 @@
-const { selectArticleById, updateArticleById, selectAllArticles } = require("../models/articles");
+const {
+  selectArticleById,
+  updateArticleById,
+  selectAllArticles,
+  insertArticle,
+} = require("../models/articles");
 const { selectTopicBySlug } = require("../models/topics");
 
 exports.getArticleById = (req, res, next) => {
@@ -37,6 +42,16 @@ exports.getAllArticles = (req, res, next) => {
   Promise.all(promises)
     .then(([articles]) => {
       res.status(200).send({ articles });
+    })
+    .catch(next);
+};
+
+exports.postArticle = (req, res, next) => {
+  const { body } = req;
+
+  insertArticle(body)
+    .then((article) => {
+      res.status(201).send({ article });
     })
     .catch(next);
 };
