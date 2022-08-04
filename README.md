@@ -215,3 +215,13 @@ Response Format Example:
     }
 }
 ```
+
+### POST /api/topics
+
+Adds a new topic using `postTopic` and `insertTopic(body)`. The body must contain `slug` and `description`, `slug` must be unique or it will error back. If any keys are missing then an error will be returned and any other keys will be ignored. Returns the added topic.
+
+Response Format Example:
+
+```
+{ "topics": [{ "slug": "football", "description": "Footie!" }]}
+```
