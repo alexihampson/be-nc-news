@@ -36,38 +36,37 @@ exports.updateArticleById = async (id, body) => {
   return row;
 };
 
-exports.selectAllArticles = async (sort_by, order, topic) => {
-  let dbRequest;
+exports.selectAllArticles = async (sort_by, order, topic, limit, p) => {
+  let baseRequest = format(
+    `SELECT articles.article_id AS article_id, articles.author AS author, title, articles.body AS body, topic, articles.created_at AS created_at, articles.votes AS votes, COUNT(comment_id) AS comment_count 
+    FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id`
+  );
+  let queryRequest = "";
+  let limitRequest = format(
+    ` GROUP BY articles.article_id
+    ORDER BY articles.%s %s 
+    LIMIT %s OFFSET %s;`,
+    sort_by,
+    order.toUpperCase(),
+    limit,
+    (p - 1) * limit
+  );
 
   if (topic) {
-    dbRequest = format(
-      `SELECT articles.article_id AS article_id, articles.author AS author, title, articles.body AS body, topic, articles.created_at AS created_at, articles.votes AS votes, COUNT(comment_id) AS comment_count 
-    FROM articles 
-    LEFT JOIN comments ON articles.article_id = comments.article_id 
-    WHERE topic='%s' 
-    GROUP BY articles.article_id
-    ORDER BY articles.%s %s;`,
-      topic,
-      sort_by,
-      order.toUpperCase()
-    );
-  } else {
-    dbRequest = format(
-      `SELECT articles.article_id AS article_id, articles.author AS author, title, articles.body AS body, topic, articles.created_at AS created_at, articles.votes AS votes, COUNT(comment_id) AS comment_count 
-    FROM articles 
-    LEFT JOIN comments ON articles.article_id = comments.article_id 
-    GROUP BY articles.article_id
-    ORDER BY %s %s;`,
-      sort_by,
-      order.toUpperCase()
-    );
+    queryRequest = format(` WHERE topic='%s'`, topic);
   }
 
-  const { rows } = await db.query(dbRequest);
+  const { rows } = await db.query(baseRequest + queryRequest + limitRequest);
 
   rows.forEach((row) => (row.comment_count = parseInt(row.comment_count)));
 
-  return rows;
+  const {
+    rows: [{ total_count }],
+  } = await db.query("SELECT COUNT(*) AS total_count FROM articles" + queryRequest + ";");
+
+  if (total_count < (p - 1) * limit) return Promise.reject({ status: 404, msg: "Page Not Found" });
+
+  return [rows, parseInt(total_count)];
 };
 
 exports.insertArticle = async (body) => {

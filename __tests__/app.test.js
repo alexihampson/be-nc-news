@@ -124,7 +124,7 @@ describe("/api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then((res) => {
-          expect(res.body.articles.length).toBe(data.articleData.length);
+          expect(res.body.articles.length).toBe(10);
           expect(res.body.articles).toBeSortedBy("created_at", { descending: true });
           res.body.articles.forEach((article) => {
             expect(article.author).toEqual(expect.any(String));
@@ -135,6 +135,7 @@ describe("/api/articles", () => {
             expect(article.votes).toEqual(expect.any(Number));
             expect(article.comment_count).toEqual(expect.any(Number));
           });
+          expect(res.body.total_count).toBe(data.articleData.length);
         });
     });
 
@@ -170,7 +171,7 @@ describe("/api/articles", () => {
 
     test("200: Returns list of articles after processing multiple queries", () => {
       return request(app)
-        .get("/api/articles?topic=mitch&order=asc&sort_by=article_id")
+        .get("/api/articles?topic=mitch&order=asc&sort_by=article_id&limit=100")
         .expect(200)
         .then((res) => {
           expect(res.body.articles).toBeSortedBy("article_id");
@@ -187,12 +188,32 @@ describe("/api/articles", () => {
         });
     });
 
+    test("200: Returns list restricted by the limit query", () => {
+      return request(app)
+        .get("/api/articles?limit=5")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.total_count).toBe(data.articleData.length);
+          expect(res.body.articles.length).toBe(5);
+        });
+    });
+
+    test("200: Returns list restricted by the page query", () => {
+      return request(app)
+        .get("/api/articles?p=2")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.total_count).toBe(data.articleData.length);
+          expect(res.body.articles.length).toBeLessThanOrEqual(10);
+        });
+    });
+
     test("400: Returns error if sort_by column doesn't exist", () => {
       return request(app)
         .get("/api/articles?sort_by=banana")
         .expect(400)
         .then((res) => {
-          expect(res.body.msg).toBe("Incorrect column name");
+          expect(res.body.msg).toBe("Query Error");
         });
     });
 
@@ -201,7 +222,7 @@ describe("/api/articles", () => {
         .get("/api/articles?order=banana")
         .expect(400)
         .then((res) => {
-          expect(res.body.msg).toBe("Incorrect order format");
+          expect(res.body.msg).toBe("Query Error");
         });
     });
 
@@ -211,6 +232,33 @@ describe("/api/articles", () => {
         .expect(404)
         .then((res) => {
           expect(res.body.msg).toBe("Topic not found");
+        });
+    });
+
+    test("400: Returns error if limit is not a number", () => {
+      return request(app)
+        .get("/api/articles?limit=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Query Error");
+        });
+    });
+
+    test("400: Returns error if page is not a number", () => {
+      return request(app)
+        .get("/api/articles?p=banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Query Error");
+        });
+    });
+
+    test("404: Returns error if page is beyond the extent of the data", () => {
+      return request(app)
+        .get("/api/articles?p=1000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Page Not Found");
         });
     });
   });

@@ -34,7 +34,7 @@ Response Format Example:
 
 ### GET /api/articles
 
-Returns an array listing all articles using `getAllArticles`, `selectTopicBySlug(slug)`, and `selectAllArticles()`. Can also be passed three possible queries; `topic` will filter based on the topic slug as can be seen in the pervious section, `sort_by` will select a key to sort by, and `order` takes either `asc` or `desc` to state whether response should be sorted ascendingly or decendingly.
+Returns an array listing all articles using `getAllArticles`, `selectTopicBySlug(slug)`, and `selectAllArticles()`. Can also be passed three possible queries; `topic` will filter based on the topic slug as can be seen in the pervious section, `sort_by` will select a key to sort by, and `order` takes either `asc` or `desc` to state whether response should be sorted ascendingly or decendingly. The response will also be paginated with a default size limit of 10, the limit can be changed by using the `limit` query and the page can be select using the `p` query.
 
 Response Format Example:
 
