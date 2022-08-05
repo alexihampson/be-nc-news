@@ -184,11 +184,11 @@
         "slug": "cats",
         "description": "Description of the topic..."
       }
-    },
+    }
   },
   "DELETE /api/articles/:article_id": {
     "description": "Removes article provided",
     "queries": [],
     "responseCode": 204
-    }
+  }
 }
