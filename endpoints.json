@@ -168,5 +168,10 @@
         "votes": 10
       }
     }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "Removes article provided",
+    "queries": [],
+    "responseCode": 204
   }
 }
