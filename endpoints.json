@@ -156,6 +156,20 @@
     }
   },
   "/api/comments/:comment_id": {
+    "GET": {
+      "description": "Serves an object containing the comment as specified by the ID provided",
+      "queries": [],
+      "responseCode": 200,
+      "exampleResponse": {
+        "comment": {
+          "comment_id": 25,
+          "votes": 0,
+          "created_at": "2020-11-03T09:12:00.000Z",
+          "author": "johnsmith",
+          "body": "Text from the comment..."
+        }
+      }
+    },
     "PATCH": {
       "description": "Updates the value of the votes for the given comment",
       "queries": [],

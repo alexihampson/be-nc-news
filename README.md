@@ -229,3 +229,21 @@ Response Format Example:
 ### DELETE /api/articles/:article_id
 
 Removes the chosen article from the database using `deleteArticleById` and `removeArticleById(id)`. Returns 204 - No Content.
+
+### GET /api/comments/:comment_id
+
+Returns a JSON object containing the comment requested using `getCommentById` and `selectCommentById(id)`.
+
+Response Format Example:
+
+```
+{
+"comment": {
+    "comment_id": 25,
+    "votes": 0,
+    "created_at": "2020-11-03T09:12:00.000Z",
+    "author": "johnsmith",
+    "body": "Text from the comment..."
+    }
+}
+```
