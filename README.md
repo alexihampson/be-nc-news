@@ -262,3 +262,18 @@ Response Format Example:
     }
 }
 ```
+
+### PATCH /api/topics/:slug
+
+Updates the `description` value of the given topic using `patchTopicBySlug` and `updateTopicBySlug(slug, body)`. Takes a body containing a `description` parameter ignoring any others, if this key is missing it will error back. Returns the updated topic.
+
+Response Format Example:
+
+```
+{
+"topic": {
+    "slug": "cats",
+    "description": "Text from the topic..."
+    }
+}
+```

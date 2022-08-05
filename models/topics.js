@@ -29,3 +29,18 @@ exports.insertTopic = async (body) => {
 
   return row;
 };
+
+exports.updateTopicBySlug = async (slug, body) => {
+  if (!body.description) return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query("UPDATE topics SET description=$1 WHERE slug=$2 RETURNING *;", [
+    body.description,
+    slug,
+  ]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "Topic Not Found" });
+
+  return row;
+};

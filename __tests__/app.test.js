@@ -55,7 +55,6 @@ describe("/api/topics", () => {
         .send(test)
         .expect(400)
         .then((res) => {
-          console.log(res.body);
           expect(res.body.msg).toBe("Invalid Key");
         });
     });
@@ -712,6 +711,44 @@ describe("/api/topics/:slug", () => {
         .expect(404)
         .then((res) => {
           expect(res.body.msg).toBe("Topic Not Found");
+        });
+    });
+  });
+
+  describe("PATCH", () => {
+    test("200: returns valid topic info", () => {
+      const test = { description: "Very Cute!", banana: "banana" };
+      return request(app)
+        .patch("/api/topics/cats")
+        .send(test)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.topic).toEqual({
+            slug: "cats",
+            description: "Very Cute!",
+          });
+        });
+    });
+
+    test("404: returns Topic Not Found if incorrect slug", () => {
+      const test = { description: "Very Cute!" };
+      return request(app)
+        .patch("/api/topics/idontexist")
+        .send(test)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Topic Not Found");
+        });
+    });
+
+    test("400: returns Topic Not Found if incorrect slug", () => {
+      const test = { banana: "banana" };
+      return request(app)
+        .patch("/api/topics/cats")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
         });
     });
   });
