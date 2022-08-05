@@ -298,7 +298,7 @@ Response Format Example:
 }
 ```
 
-### PATCH /api/users/:slug
+### PATCH /api/users/:username
 
 Updates the `avatar_url` value of the given user using `patchUserByUsername` and `updateUserBySlug(username, body)`. Takes a body containing a `avatar_url` parameter ignoring any others, if this key is missing it will error back. Returns the updated user.
 
