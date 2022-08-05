@@ -1,4 +1,9 @@
-const { selectAllTopics, insertTopic, selectTopicBySlug } = require("../models/topics");
+const {
+  selectAllTopics,
+  insertTopic,
+  selectTopicBySlug,
+  updateTopicBySlug,
+} = require("../models/topics");
 
 exports.getAllTopics = (req, res, next) => {
   selectAllTopics()
@@ -22,6 +27,19 @@ exports.getTopicBySlug = (req, res, next) => {
   const { slug } = req.params;
 
   selectTopicBySlug(slug)
+    .then((topic) => {
+      res.status(200).send({ topic });
+    })
+    .catch(next);
+};
+
+exports.patchTopicBySlug = (req, res, next) => {
+  const {
+    body,
+    params: { slug },
+  } = req;
+
+  updateTopicBySlug(slug, body)
     .then((topic) => {
       res.status(200).send({ topic });
     })

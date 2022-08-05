@@ -41,6 +41,20 @@
           "description": "Not dogs"
         }
       }
+    },
+    "PATCH": {
+      "description": "Updates the description of the given topic",
+      "queries": [],
+      "exampleBody": {
+        "description": "Very cute!"
+      },
+      "responseCode": 200,
+      "exampleResponse": {
+        "topic": {
+          "slug": "cats",
+          "description": "Very cute!"
+        }
+      }
     }
   },
   "/api/articles": {
