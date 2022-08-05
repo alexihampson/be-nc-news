@@ -16,3 +16,16 @@ exports.selectTopicBySlug = async (slug) => {
 
   return row;
 };
+
+exports.insertTopic = async (body) => {
+  if (!body.slug || !body.description) return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query("INSERT INTO topics (slug, description) VALUES ($1,$2) RETURNING *;", [
+    body.slug,
+    body.description,
+  ]);
+
+  return row;
+};
