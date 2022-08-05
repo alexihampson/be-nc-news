@@ -3,6 +3,7 @@ const {
   insertCommentByArticleId,
   removeCommentById,
   updateCommentById,
+  selectCommentById,
 } = require("../models/comments");
 const { selectArticleById } = require("../models/articles");
 
@@ -52,6 +53,16 @@ exports.patchCommentById = (req, res, next) => {
   } = req;
 
   updateCommentById(comment_id, body)
+    .then((comment) => {
+      res.status(200).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.getCommentById = (req, res, next) => {
+  const { comment_id } = req.params;
+
+  selectCommentById(comment_id)
     .then((comment) => {
       res.status(200).send({ comment });
     })

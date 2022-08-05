@@ -617,6 +617,40 @@ describe("/api/comments/:comment_id", () => {
         });
     });
   });
+
+  describe("GET", () => {
+    test("200: Returns requested comment", () => {
+      return request(app)
+        .get("/api/comments/2")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comment.comment_id).toBe(2);
+          expect(res.body.comment.votes).toEqual(expect.any(Number));
+          expect(res.body.comment.created_at).toEqual(expect.any(String));
+          expect(res.body.comment.author).toEqual(expect.any(String));
+          expect(res.body.comment.body).toEqual(expect.any(String));
+          expect(res.body.comment.article_id).toEqual(expect.any(Number));
+        });
+    });
+
+    test("404: Returns error if comment Id out of range", () => {
+      return request(app)
+        .get("/api/comments/200000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID Not Found");
+        });
+    });
+
+    test("400: Returns error if comment Id invalid type", () => {
+      return request(app)
+        .get("/api/comments/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+  });
 });
 
 describe("/api", () => {
