@@ -30,6 +30,19 @@
       }
     }
   },
+  "/api/topics/:slug": {
+    "GET": {
+      "description": "Serves an object containing the topic as specified by the slug provided",
+      "queries": [],
+      "responseCode": 200,
+      "exampleResponse": {
+        "topic": {
+          "slug": "cats",
+          "description": "Not dogs"
+        }
+      }
+    }
+  },
   "/api/articles": {
     "GET": {
       "description": "serves an array of all articles",

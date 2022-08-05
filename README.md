@@ -247,3 +247,18 @@ Response Format Example:
     }
 }
 ```
+
+### GET /api/topics/:slug
+
+Returns a JSON object containing the topic requested using `getTopicBySlug` and `selectTopicBySlug(slug)`.
+
+Response Format Example:
+
+```
+{
+"topic": {
+    "slug": "cats",
+    "description": "Text from the topic..."
+    }
+}
+```

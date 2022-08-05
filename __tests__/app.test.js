@@ -292,7 +292,7 @@ describe("/api/articles", () => {
         .get("/api/articles?topic=banana")
         .expect(404)
         .then((res) => {
-          expect(res.body.msg).toBe("Topic not found");
+          expect(res.body.msg).toBe("Topic Not Found");
         });
     });
 
@@ -687,6 +687,31 @@ describe("/api/users/:username", () => {
         .expect(404)
         .then((res) => {
           expect(res.body.msg).toBe("User not found");
+        });
+    });
+  });
+});
+
+describe("/api/topics/:slug", () => {
+  describe("GET", () => {
+    test("200: returns valid topic info", () => {
+      return request(app)
+        .get("/api/topics/cats")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.topic).toEqual({
+            slug: "cats",
+            description: "Not dogs",
+          });
+        });
+    });
+
+    test("404: returns Topic Not Found if incorrect slug", () => {
+      return request(app)
+        .get("/api/topics/idontexist")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Topic Not Found");
         });
     });
   });
