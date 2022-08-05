@@ -313,3 +313,7 @@ Response Format Example:
     }
 }
 ```
+
+### DELETE /api/users/:username
+
+Removes the chosen user from the database using `deleteUserByUsername` and `removeUserByUsername(username)`. Returns 204 - No Content.

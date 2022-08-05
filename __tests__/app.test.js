@@ -763,6 +763,21 @@ describe("/api/users/:username", () => {
         });
     });
   });
+
+  describe("DELETE", () => {
+    test("204: Returns no content if the delete completes", () => {
+      return request(app).delete("/api/users/lurker").expect(204);
+    });
+
+    test("404: Returns error if user id not in the db", () => {
+      return request(app)
+        .delete("/api/users/imnotreal")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("User Not Found");
+        });
+    });
+  });
 });
 
 describe("/api/topics/:slug", () => {
