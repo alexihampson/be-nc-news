@@ -237,6 +237,23 @@
           }
         ]
       }
+    },
+    "POST": {
+      "description": "Adds a new user",
+      "queries": [],
+      "exampleBody": {
+        "username": "johnsmith",
+        "name": "john",
+        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+      },
+      "responseCode": 201,
+      "exampleResponse": {
+        "user": {
+          "username": "johnsmith",
+          "name": "john",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+        }
+      }
     }
   },
   "/api/users/:username": {
