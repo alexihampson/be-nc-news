@@ -3,6 +3,7 @@ const {
   insertTopic,
   selectTopicBySlug,
   updateTopicBySlug,
+  removeTopicBySlug,
 } = require("../models/topics");
 
 exports.getAllTopics = (req, res, next) => {
@@ -42,6 +43,16 @@ exports.patchTopicBySlug = (req, res, next) => {
   updateTopicBySlug(slug, body)
     .then((topic) => {
       res.status(200).send({ topic });
+    })
+    .catch(next);
+};
+
+exports.deleteTopicBySlug = (req, res, next) => {
+  const { slug } = req.params;
+
+  removeTopicBySlug(slug)
+    .then(() => {
+      res.status(204).send();
     })
     .catch(next);
 };
