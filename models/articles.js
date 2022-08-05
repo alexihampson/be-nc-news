@@ -83,3 +83,13 @@ exports.insertArticle = async (body) => {
 
   return row;
 };
+
+exports.removeArticleById = async (id) => {
+  const {
+    rows: [row],
+  } = await db.query("DELETE FROM articles WHERE article_id=$1 RETURNING *;", [id]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "ID Not Found" });
+
+  return row;
+};

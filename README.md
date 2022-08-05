@@ -225,3 +225,7 @@ Response Format Example:
 ```
 { "topics": [{ "slug": "football", "description": "Footie!" }]}
 ```
+
+### DELETE /api/articles/:article_id
+
+Removes the chosen article from the database using `deleteArticleById` and `removeArticleById(id)`. Returns 204 - No Content.

@@ -139,6 +139,30 @@ describe("/api/article/:article_id", () => {
         });
     });
   });
+
+  describe("DELETE", () => {
+    test("200: Returns 204 no content when successfull", () => {
+      return request(app).delete("/api/articles/2").expect(204);
+    });
+
+    test("404: Returns correct error when ID out of range", () => {
+      return request(app)
+        .delete("/api/articles/30000000")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("ID Not Found");
+        });
+    });
+
+    test("400: Returns correct error when ID of invalid type", () => {
+      return request(app)
+        .delete("/api/articles/banana")
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Bad Request");
+        });
+    });
+  });
 });
 
 describe("/api/users", () => {
