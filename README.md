@@ -297,3 +297,19 @@ Response Format Example:
     }
 }
 ```
+
+### PATCH /api/users/:slug
+
+Updates the `avatar_url` value of the given user using `patchUserByUsername` and `updateUserBySlug(username, body)`. Takes a body containing a `avatar_url` parameter ignoring any others, if this key is missing it will error back. Returns the updated user.
+
+Response Format Example:
+
+```
+{
+"user": {
+    "username": "lurker",
+    "name": "do_nothing",
+    "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    }
+}
+```
