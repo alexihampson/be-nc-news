@@ -283,6 +283,11 @@
           "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
         }
       }
+    },
+    "DELETE": {
+      "description": "Removes user provided",
+      "queries": [],
+      "responseCode": 204
     }
   }
 }

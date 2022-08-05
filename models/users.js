@@ -45,3 +45,13 @@ exports.updateUserByUsername = async (username, body) => {
 
   return row;
 };
+
+exports.removeUserByUsername = async (username) => {
+  const {
+    rows: [row],
+  } = await db.query("DELETE FROM users WHERE username=$1 RETURNING *;", [username]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "User Not Found" });
+
+  return row;
+};
