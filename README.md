@@ -223,7 +223,7 @@ Adds a new topic using `postTopic` and `insertTopic(body)`. The body must contai
 Response Format Example:
 
 ```
-{ "topics": [{ "slug": "football", "description": "Footie!" }]}
+{ "topic": { "slug": "football", "description": "Footie!" }}
 ```
 
 ### DELETE /api/articles/:article_id
@@ -281,3 +281,19 @@ Response Format Example:
 ### DELETE /api/topics/:slug
 
 Removes the chosen topic from the database using `deleteTopicBySlug` and `removeTopicBySlug(slug)`. Returns 204 - No Content.
+
+### POST /api/users
+
+Adds a new user using `postUser` and `insertUser(body)`. The body must contain `username`, `name`, and `avatar_url`; `username` must be unique or it will error back. If any keys are missing then an error will be returned and any other keys will be ignored. Returns the added user.
+
+Response Format Example:
+
+```
+{
+"user": {
+    "username": "johnsmith",
+    "name": "john",
+    "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+    }
+}
+```

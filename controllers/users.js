@@ -1,4 +1,4 @@
-const { selectAllUsers, selectUserByUsername } = require("../models/users");
+const { selectAllUsers, selectUserByUsername, insertUser } = require("../models/users");
 
 exports.getAllUsers = (req, res, next) => {
   selectAllUsers()
@@ -14,6 +14,16 @@ exports.getUserByUsername = (req, res, next) => {
   selectUserByUsername(username)
     .then((user) => {
       res.status(200).send({ user });
+    })
+    .catch(next);
+};
+
+exports.postUser = (req, res, next) => {
+  const { body } = req;
+
+  insertUser(body)
+    .then((user) => {
+      res.status(201).send({ user });
     })
     .catch(next);
 };

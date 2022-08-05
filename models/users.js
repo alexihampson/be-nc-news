@@ -16,3 +16,17 @@ exports.selectUserByUsername = async (username) => {
 
   return row;
 };
+
+exports.insertUser = async (body) => {
+  if (!body.username || !body.name || !body.avatar_url)
+    return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query(
+    "INSERT INTO users (username, name, avatar_url) VALUES ($1,$2,$3) RETURNING *;",
+    [body.username, body.name, body.avatar_url]
+  );
+
+  return row;
+};

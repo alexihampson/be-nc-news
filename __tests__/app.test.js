@@ -175,6 +175,41 @@ describe("/api/users", () => {
         });
     });
   });
+
+  describe("POST", () => {
+    test("201: Returns the added user", () => {
+      const test = { username: "Test", name: "Test", avatar_url: "Test" };
+      return request(app)
+        .post("/api/users")
+        .send(test)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.user).toEqual(test);
+        });
+    });
+
+    test("400: Returns correct error when body missing key", () => {
+      const test = { username: "Test", name: "Test" };
+      return request(app)
+        .post("/api/users")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+
+    test("400: Returns correct error when username already taken", () => {
+      const test = { username: "lurker", name: "Test", avatar_url: "Test" };
+      return request(app)
+        .post("/api/users")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Invalid Key");
+        });
+    });
+  });
 });
 
 describe("/api/articles", () => {
