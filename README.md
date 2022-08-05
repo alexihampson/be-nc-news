@@ -277,3 +277,7 @@ Response Format Example:
     }
 }
 ```
+
+### DELETE /api/topics/:slug
+
+Removes the chosen topic from the database using `deleteTopicBySlug` and `removeTopicBySlug(slug)`. Returns 204 - No Content.

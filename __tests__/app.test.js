@@ -752,4 +752,19 @@ describe("/api/topics/:slug", () => {
         });
     });
   });
+
+  describe("DELETE", () => {
+    test("200: Returns 204 no content when successfull", () => {
+      return request(app).delete("/api/topics/paper").expect(204);
+    });
+
+    test("404: Returns correct error when slug doesn't exist", () => {
+      return request(app)
+        .delete("/api/topics/banana")
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("Topic Not Found");
+        });
+    });
+  });
 });

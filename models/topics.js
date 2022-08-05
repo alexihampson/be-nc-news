@@ -44,3 +44,13 @@ exports.updateTopicBySlug = async (slug, body) => {
 
   return row;
 };
+
+exports.removeTopicBySlug = async (slug) => {
+  const {
+    rows: [row],
+  } = await db.query("DELETE FROM topics WHERE slug=$1 RETURNING *;", [slug]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "Topic Not Found" });
+
+  return row;
+};

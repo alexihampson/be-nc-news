@@ -55,6 +55,11 @@
           "description": "Very cute!"
         }
       }
+    },
+    "DELETE": {
+      "description": "Removes topic provided",
+      "queries": [],
+      "responseCode": 204
     }
   },
   "/api/articles": {
