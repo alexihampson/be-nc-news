@@ -23,6 +23,43 @@ describe("/api/topics", () => {
         });
     });
   });
+
+  describe("POST", () => {
+    test("201: Returns new topic when provided one", () => {
+      const test = { slug: "test", description: "This is a test", banana: "banana" };
+      return request(app)
+        .post("/api/topics")
+        .send(test)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.topic.slug).toBe(test.slug);
+          expect(res.body.topic.description).toBe(test.description);
+        });
+    });
+
+    test("400: Returns correct error when missing key", () => {
+      const test = { slug: "test", banana: "banana" };
+      return request(app)
+        .post("/api/topics")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+
+    test("400: Returns correct error when body contains slug that already exists", () => {
+      const test = { slug: "cats", description: "The best animal" };
+      return request(app)
+        .post("/api/topics")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          console.log(res.body);
+          expect(res.body.msg).toBe("Invalid Key");
+        });
+    });
+  });
 });
 
 describe("/api/article/:article_id", () => {

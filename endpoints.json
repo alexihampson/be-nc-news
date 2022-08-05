@@ -16,6 +16,7 @@
     "queries": ["topic", "sort_by", "order", "limit", "p"],
     "responseCode": 200,
     "exampleResponse": {
+      "total_count": 420,
       "articles": [
         {
           "title": "Seafood substitutions are increasing",
@@ -86,6 +87,7 @@
     "queries": ["limit", "p"],
     "responseCode": 200,
     "exampleResponse": {
+      "total_count": 420,
       "comments": [
         {
           "comment_id": 12,
@@ -169,9 +171,24 @@
       }
     }
   },
+  "POST /api/topics": {
+    "description": "Adds a new topic",
+    "queries": [],
+    "exampleBody": {
+      "slug": "cats",
+      "description": "Description of the topic..."
+    },
+    "responseCode": 201,
+    "exampleResponse": {
+      "topic": {
+        "slug": "cats",
+        "description": "Description of the topic..."
+      }
+    },
+  },
   "DELETE /api/articles/:article_id": {
     "description": "Removes article provided",
     "queries": [],
     "responseCode": 204
-  }
+    }
 }
