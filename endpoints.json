@@ -268,6 +268,21 @@
           "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
         }
       }
+    },
+    "PATCH": {
+      "description": "Updates the avatar URL of the given user",
+      "queries": [],
+      "exampleBody": {
+        "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+      },
+      "responseCode": 200,
+      "exampleResponse": {
+        "user": {
+          "username": "lurker",
+          "name": "do_nothing",
+          "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+        }
+      }
     }
   }
 }

@@ -724,6 +724,45 @@ describe("/api/users/:username", () => {
         });
     });
   });
+
+  describe("PATCH", () => {
+    test("200: returns valid updated user", () => {
+      const test = { avatar_url: "test", banana: "banana" };
+      return request(app)
+        .patch("/api/users/lurker")
+        .send(test)
+        .expect(200)
+        .then((res) => {
+          expect(res.body.user).toEqual({
+            username: "lurker",
+            name: "do_nothing",
+            avatar_url: "test",
+          });
+        });
+    });
+
+    test("404: returns user Not Found if incorrect username", () => {
+      const test = { avatar_url: "test" };
+      return request(app)
+        .patch("/api/users/idontexist")
+        .send(test)
+        .expect(404)
+        .then((res) => {
+          expect(res.body.msg).toBe("User Not Found");
+        });
+    });
+
+    test("400: returns error is body invalid", () => {
+      const test = { banana: "banana" };
+      return request(app)
+        .patch("/api/users/lurker")
+        .send(test)
+        .expect(400)
+        .then((res) => {
+          expect(res.body.msg).toBe("Body Invalid");
+        });
+    });
+  });
 });
 
 describe("/api/topics/:slug", () => {
@@ -751,7 +790,7 @@ describe("/api/topics/:slug", () => {
   });
 
   describe("PATCH", () => {
-    test("200: returns valid topic info", () => {
+    test("200: returns valid updated topic", () => {
       const test = { description: "Very Cute!", banana: "banana" };
       return request(app)
         .patch("/api/topics/cats")

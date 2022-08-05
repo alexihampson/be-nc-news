@@ -30,3 +30,18 @@ exports.insertUser = async (body) => {
 
   return row;
 };
+
+exports.updateUserByUsername = async (username, body) => {
+  if (!body.avatar_url) return Promise.reject({ status: 400, msg: "Body Invalid" });
+
+  const {
+    rows: [row],
+  } = await db.query("UPDATE users SET avatar_url=$1 WHERE username=$2 RETURNING *;", [
+    body.avatar_url,
+    username,
+  ]);
+
+  if (!row) return Promise.reject({ status: 404, msg: "User Not Found" });
+
+  return row;
+};
