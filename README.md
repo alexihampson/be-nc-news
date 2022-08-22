@@ -1,6 +1,6 @@
 # Northcoders News API
 
-## https://alexi-nc-news.herokuapp.com/api
+## https://alexi-news-api.herokuapp.com/api
 
 ## Information
 
