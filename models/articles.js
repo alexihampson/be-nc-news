@@ -42,15 +42,29 @@ exports.selectAllArticles = async (sort_by, order, topic, limit, p) => {
     FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id`
   );
   let queryRequest = "";
-  let limitRequest = format(
-    ` GROUP BY articles.article_id
+  let limitRequest;
+
+  if (sort_by === "comment_count") {
+    limitRequest = format(
+      ` GROUP BY articles.article_id
+    ORDER BY %s %s 
+    LIMIT %s OFFSET %s;`,
+      sort_by,
+      order.toUpperCase(),
+      limit,
+      (p - 1) * limit
+    );
+  } else {
+    limitRequest = format(
+      ` GROUP BY articles.article_id
     ORDER BY articles.%s %s 
     LIMIT %s OFFSET %s;`,
-    sort_by,
-    order.toUpperCase(),
-    limit,
-    (p - 1) * limit
-  );
+      sort_by,
+      order.toUpperCase(),
+      limit,
+      (p - 1) * limit
+    );
+  }
 
   if (topic) {
     queryRequest = format(` WHERE topic='%s'`, topic);
