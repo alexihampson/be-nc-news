@@ -4,6 +4,7 @@ const {
   removeCommentById,
   updateCommentById,
   selectCommentById,
+  selectAllComments,
 } = require("../models/comments");
 const { selectArticleById } = require("../models/articles");
 
@@ -65,6 +66,16 @@ exports.getCommentById = (req, res, next) => {
   selectCommentById(comment_id)
     .then((comment) => {
       res.status(200).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.getAllComments = (req, res, next) => {
+  const { query } = req;
+
+  selectAllComments(parseInt(query.limit || 10), parseInt(query.p || 1), query.author)
+    .then(([comments, total_count]) => {
+      res.status(200).send({ total_count, comments });
     })
     .catch(next);
 };

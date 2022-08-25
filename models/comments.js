@@ -64,3 +64,35 @@ exports.selectCommentById = async (id) => {
 
   return row;
 };
+
+exports.selectAllComments = async (limit, p, author) => {
+  let rows;
+  let total_count;
+
+  if (author) {
+    rows = (
+      await db.query(
+        "SELECT comment_id, votes, created_at, author, body FROM comments WHERE author LIKE $1 LIMIT $2 OFFSET $3;",
+        [author, limit, (p - 1) * limit]
+      )
+    ).rows;
+
+    total_count = (
+      await db.query("SELECT COUNT(*) AS total_count FROM comments WHERE author LIKE $1;", [id])
+    ).rows[0].total_count;
+  } else {
+    rows = (
+      await db.query(
+        "SELECT comment_id, votes, created_at, author, body FROM comments LIMIT $1 OFFSET $2;",
+        [limit, (p - 1) * limit]
+      )
+    ).rows;
+
+    total_count = (await db.query("SELECT COUNT(*) AS total_count FROM comments;", [id])).rows[0]
+      .total_count;
+  }
+
+  if (total_count < (p - 1) * limit) return Promise.reject({ status: 404, msg: "Page Not Found" });
+
+  return [rows, parseInt(total_count)];
+};
