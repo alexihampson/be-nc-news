@@ -858,4 +858,24 @@ describe("/api/topics/:slug", () => {
   });
 });
 
-de;
+describe("/api/comments", () => {
+  describe("GET", () => {
+    test("200: Returns list of comments", () => {
+      return request(app)
+        .get("/api/comments")
+        .expect(200)
+        .then((res) => {
+          expect(res.body.comments.length).toBe(10);
+          expect(res.body.comments).toBeSortedBy("created_at", { descending: true });
+          res.body.comments.forEach((comment) => {
+            expect(comment.author).toEqual(expect.any(String));
+            expect(comment.comment_id).toEqual(expect.any(Number));
+            expect(comment.body).toEqual(expect.any(String));
+            expect(comment.created_at).toEqual(expect.any(String));
+            expect(comment.votes).toEqual(expect.any(Number));
+          });
+          expect(res.body.total_count).toBe(data.commentData.length);
+        });
+    });
+  });
+});

@@ -317,3 +317,24 @@ Response Format Example:
 ### DELETE /api/users/:username
 
 Removes the chosen user from the database using `deleteUserByUsername` and `removeUserByUsername(username)`. Returns 204 - No Content.
+
+### GET /api/comments
+
+Serves an array of all comments linked to the given article using `getAllComments` and `selectAllComments(id)`. The response will be paginated with a default size limit of 10, the limit can be changed by using the `limit` query and the page can be select using the `p` query. The `author` query will filter the response by author.
+
+Response Format Example:
+
+```
+{
+"total_count": 420,
+"comments": [
+    {
+        "comment_id": 12,
+        "votes": 5,
+        "created_at": "2020-11-03T09:12:00.000Z",
+        "author": "johnsmith",
+        "body": "Text from the comment..."
+    }
+]
+}
+```

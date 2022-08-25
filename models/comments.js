@@ -72,23 +72,23 @@ exports.selectAllComments = async (limit, p, author) => {
   if (author) {
     rows = (
       await db.query(
-        "SELECT comment_id, votes, created_at, author, body FROM comments WHERE author LIKE $1 LIMIT $2 OFFSET $3;",
+        "SELECT comment_id, votes, created_at, author, body FROM comments WHERE author = $1 ORDER BY created_at DESC LIMIT $2 OFFSET $3;",
         [author, limit, (p - 1) * limit]
       )
     ).rows;
 
     total_count = (
-      await db.query("SELECT COUNT(*) AS total_count FROM comments WHERE author LIKE $1;", [id])
+      await db.query("SELECT COUNT(*) AS total_count FROM comments WHERE author = $1;", [author])
     ).rows[0].total_count;
   } else {
     rows = (
       await db.query(
-        "SELECT comment_id, votes, created_at, author, body FROM comments LIMIT $1 OFFSET $2;",
+        "SELECT comment_id, votes, created_at, author, body FROM comments ORDER BY created_at DESC LIMIT $1 OFFSET $2;",
         [limit, (p - 1) * limit]
       )
     ).rows;
 
-    total_count = (await db.query("SELECT COUNT(*) AS total_count FROM comments;", [id])).rows[0]
+    total_count = (await db.query("SELECT COUNT(*) AS total_count FROM comments;")).rows[0]
       .total_count;
   }
 
