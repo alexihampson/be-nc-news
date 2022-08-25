@@ -65,7 +65,7 @@
   "/api/articles": {
     "GET": {
       "description": "serves an array of all articles",
-      "queries": ["topic", "sort_by", "order", "limit", "p"],
+      "queries": ["topic", "sort_by", "order", "limit", "p", "author"],
       "responseCode": 200,
       "exampleResponse": {
         "total_count": 420,

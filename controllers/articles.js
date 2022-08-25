@@ -38,7 +38,9 @@ exports.getAllArticles = (req, res, next) => {
   const limit = query.limit || 10;
   const p = query.p || 1;
 
-  const promises = [selectAllArticles(sort_by, order, query.topic, parseInt(limit), parseInt(p))];
+  const promises = [
+    selectAllArticles(sort_by, order, query.topic, parseInt(limit), parseInt(p), query.author),
+  ];
 
   if (query.topic) promises.push(selectTopicBySlug(query.topic));
 

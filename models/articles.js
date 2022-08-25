@@ -36,7 +36,7 @@ exports.updateArticleById = async (id, body) => {
   return row;
 };
 
-exports.selectAllArticles = async (sort_by, order, topic, limit, p) => {
+exports.selectAllArticles = async (sort_by, order, topic, limit, p, user) => {
   let baseRequest = format(
     `SELECT articles.article_id AS article_id, articles.author AS author, title, articles.body AS body, topic, articles.created_at AS created_at, articles.votes AS votes, COUNT(comment_id) AS comment_count 
     FROM articles LEFT JOIN comments ON articles.article_id = comments.article_id`
@@ -68,6 +68,8 @@ exports.selectAllArticles = async (sort_by, order, topic, limit, p) => {
 
   if (topic) {
     queryRequest = format(` WHERE topic='%s'`, topic);
+  } else if (user) {
+    queryRequest = format(` WHERE articles.author='%s'`, user);
   }
 
   const { rows } = await db.query(baseRequest + queryRequest + limitRequest);
